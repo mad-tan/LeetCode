@@ -1,0 +1,52 @@
+// Brute Force
+class Solution {
+    public int trap(int[] height) {
+        int[][] dp = new int[3][height.length];
+        int temp = height[0];
+        for(int i=1;i<height.length;++i){
+            dp[0][i] = temp;
+            if(height[i]>temp)  temp = height[i];
+        }
+        temp = 0;
+        for(int i=height.length-1;i>0;--i){
+            dp[1][i] = temp;
+             if(height[i]>temp)  temp = height[i];
+        }
+        for(int i=0;i<height.length;++i){
+            dp[2][i] = Math.min(dp[0][i],dp[1][i]);
+            
+        }
+        int count = 0;
+        for(int i=0;i<height.length;++i){
+            if(dp[2][i]-height[i]<0)    continue;
+            count+=dp[2][i]-height[i];
+        }
+        return count;
+       
+
+    }
+}
+
+//Optimal
+class Solution {
+    public int trap(int[] height) {
+      int left = 0;
+      int right = height.length-1;
+      int maxLeft = height[left];
+      int maxRight = height[right];
+      int count = 0;
+      while(left<right){
+        if(maxLeft<maxRight){
+            left+=1;
+            maxLeft = Math.max(maxLeft,height[left]);
+            count += maxLeft - height[left];
+        }
+        else{
+            right-=1;
+            maxRight = Math.max(maxRight,height[right]);
+            count += maxRight - height[right];
+        }
+      }
+      return count;  
+    }
+}

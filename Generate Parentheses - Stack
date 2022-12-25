@@ -1,0 +1,40 @@
+Example 1:
+Input: n = 3
+Output: ["((()))","(()())","(())()","()(())","()()()"]
+
+Example 2:
+Input: n = 1
+Output: ["()"]
+
+Techniques I used: Stack, Backtracking
+
+//Recursion
+class Solution {
+    Stack<Character> st = new Stack<>();
+    List<String> res = new ArrayList<>();
+    public List<String> generateParenthesis(int n) {
+        trace(0,0,n);
+        return res;
+    }
+    public void trace(int open, int close, int total){
+        if(open==close && open == total){
+           Iterator val = st.iterator();
+            String temp = "";
+            while (val.hasNext()) {
+                temp = temp + val.next();
+            }
+            res.add(temp);
+        }
+         if(open<total){
+            st.push('(');
+            trace(open+1,close,total);
+            st.pop();
+        }
+         if(close<open){
+            st.push(')');
+            trace(open,close+1,total);
+            st.pop();
+        }
+
+    }
+}

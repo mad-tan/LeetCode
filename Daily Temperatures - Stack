@@ -10,7 +10,7 @@ Example 3:
 Input: temperatures = [30,60,90]
 Output: [1,1,0]
 
-Techniques I used: 
+Techniques I used: Monotonic Stack
 
 //Brute Force O(n^2)
 class Solution {
@@ -28,4 +28,20 @@ class Solution {
     }
 }
 
-//Optimal
+//Optimal O(n)
+class Solution {
+    public int[] dailyTemperatures(int[] temperatures) {
+        int[] res = new int[temperatures.length];
+       Stack<Integer> st = new Stack<>();
+       st.add(0);
+       for(int i = 1;i<temperatures.length;++i){
+           while(!st.isEmpty() && temperatures[st.peek()]<temperatures[i]){
+               int temp = st.pop();
+               res[temp] =   i-temp;
+              
+           }
+           st.push(i);
+       }
+        return res;
+    }
+}

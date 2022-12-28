@@ -1,0 +1,36 @@
+Example 1:
+Input: piles = [3,6,7,11], h = 8
+Output: 4
+
+Example 2:
+Input: piles = [30,11,23,4,20], h = 5
+Output: 30
+
+Example 3:
+Input: piles = [30,11,23,4,20], h = 6
+Output: 23
+
+Techniques I used: Binary Search
+
+class Solution {
+    public int minEatingSpeed(int[] piles, int h) {
+        int maxRate = Integer.MIN_VALUE;
+        for(int n:piles){
+            if(maxRate<n)   maxRate=n;
+        }
+        int start = 1;
+        int end = maxRate;
+        while(start<=end){
+            int mid = start+(end-start)/2;
+            int count = 0;
+            for(int n:piles){
+                int a = n/mid;
+                count+=a;
+                if(n%mid!=0)  count++;
+            }
+            if(count<=h) end = mid-1;
+            else start = mid+1;
+        }
+        return start;
+    }
+}

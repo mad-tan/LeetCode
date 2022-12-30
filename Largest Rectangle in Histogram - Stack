@@ -1,0 +1,32 @@
+Example 1:
+Input: heights = [2,1,5,6,2,3]
+Output: 10
+
+Example 2:
+Input: heights = [2,4]
+Output: 4
+
+Techniques I used: Monotonic Increasing Stack
+
+class Solution {
+    public int largestRectangleArea(int[] heights) {
+        int length = heights.length;
+        int res = 0;
+        Stack<Pair<Integer,Integer>> st = new Stack<>();
+        for(int i = 0;i<length;++i){
+            int curHeight = heights[i];
+            int curIndex = i;
+            while(!st.isEmpty() && st.peek().getValue() > curHeight){
+                    Pair<Integer,Integer> temp = st.pop();    
+                    res = Math.max(res, temp.getValue() * (i - temp.getKey()));
+                    curIndex = temp.getKey();
+            }
+            st.push(new Pair(curIndex,heights[i]));
+        }
+        while(!st.isEmpty()){
+            Pair<Integer,Integer> temp = st.pop();
+            res = Math.max(res, temp.getValue() * (length-temp.getKey()));
+        }
+        return res;
+    }
+}

@@ -1,0 +1,57 @@
+Example 1:
+Input: root = [3,9,20,null,null,15,7]
+Output: 3
+
+Example 2:
+Input: root = [1,null,2]
+Output: 2
+
+Techniques I used: BFS, DFS
+
+//Recursive
+class Solution {
+    public int maxDepth(TreeNode root) {
+        if(root==null)  return 0;
+        return Math.max(1+maxDepth(root.left),1+maxDepth(root.right));   
+    }
+}
+
+//Iterative BFS
+class Solution {
+    public int maxDepth(TreeNode root) {
+        if(root==null)  return 0;
+        Queue<TreeNode> qu = new LinkedList<>();
+        int result = 0;
+        qu.offer(root);
+        while(!qu.isEmpty()){
+            result+=1;
+            int num = qu.size();
+            while(num>0){
+                TreeNode temp = qu.poll();
+                if(temp.left!=null) qu.offer(temp.left);
+                if(temp.right!=null) qu.offer(temp.right);
+                num--;
+            }
+        }
+        return result;
+    }
+}
+
+//Iterative DFS
+class Solution {
+    public int maxDepth(TreeNode root) {
+        if(root==null)  return 0;
+        Stack<Pair<TreeNode,Integer>> st = new Stack<>();
+        int result = 0;
+        st.push(new Pair(root,1));
+        while(!st.isEmpty()){
+            Pair<TreeNode,Integer> temp = st.pop();
+            TreeNode tempNode = temp.getKey();
+            Integer tempDepth = temp.getValue();
+            result = Math.max(result,tempDepth);
+            if(tempNode.left!=null) st.push(new Pair(tempNode.left,tempDepth+1));
+            if(tempNode.right!=null) st.push(new Pair(tempNode.right,tempDepth+1));
+        }
+        return result;
+    }
+}

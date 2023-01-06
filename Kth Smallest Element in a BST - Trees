@@ -1,0 +1,50 @@
+Example 1:
+Input: root = [3,1,4,null,2], k = 1
+Output: 1
+
+Example 2:
+Input: root = [5,3,6,2,4,null,null,1], k = 3
+Output: 3
+
+Techniques I used: DFS
+
+//Brute Force - Inorder traversal O(n)
+class Solution {
+    List<Integer> temp;
+    public int kthSmallest(TreeNode root, int k) {
+        temp = new ArrayList<>();
+        //Traversing
+        inorder(root);
+        return temp.get(k-1);
+    }
+    public void inorder(TreeNode root){
+        if(root==null)  return;
+        inorder(root.left);
+        temp.add(root.val);
+        inorder(root.right);
+    }
+}
+
+//Optimal - Iterative DFS O(log(n))
+class Solution {
+    public int kthSmallest(TreeNode root, int k) {
+        Stack<TreeNode> st = new Stack<>();
+        Set<TreeNode> visited = new HashSet<>();
+        st.push(root);
+        while(!st.isEmpty()){
+            TreeNode temp = st.peek();
+            if(temp.left==null || visited.contains(temp.left)){
+                visited.add(temp);
+                k--;
+                if(k==0)    return temp.val;
+                TreeNode temp1 = st.peek();
+                st.pop();
+                if(temp1.right!=null)    st.push(temp1.right);
+            }
+            else{
+                st.push(temp.left);
+            }
+        }
+        return -1;
+    }
+}

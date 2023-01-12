@@ -1,0 +1,43 @@
+Example 1:
+Input: s = "aab"
+Output: [["a","a","b"],["aa","b"]]
+
+Example 2:
+Input: s = "a"
+Output: [["a"]]
+
+Techniques I used: Backtracking with recursion(O(n^2))
+
+class Solution {
+    List<List<String>> res;
+    public List<List<String>> partition(String s) {
+        res = new ArrayList<>();
+        List<String> current = new ArrayList<>();
+        partition("",s,current);
+        return res;
+    }
+    public void partition(String p, String up, List<String> temp){
+        if(up.equals(""))   res.add(new ArrayList<>(temp));
+        else{
+            for(int i = 0;i<up.length();++i){
+                if(isPallindrome(up.substring(0,i+1))){
+                    temp.add(up.substring(0,i+1));
+                    partition(up.substring(0,i+1), up.substring(i+1),temp);
+                    temp.remove(temp.size()-1);
+                }
+            }
+        }
+    }
+    public boolean isPallindrome(String s){
+        if(s.length()<1)    return false;
+        if(s.length()==1) return true;
+        int l = 0;
+        int r = s.length()-1;
+        while(l<=r){
+            if(s.charAt(l)!=s.charAt(r))    return false;
+            l++;
+            r--;
+        }
+        return true;
+    }
+}

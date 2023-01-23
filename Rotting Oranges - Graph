@@ -1,0 +1,49 @@
+Example 1:
+Input: grid = [[2,1,1],[1,1,0],[0,1,1]]
+Output: 4
+
+Example 2:
+Input: grid = [[2,1,1],[0,1,1],[1,0,1]]
+Output: -1
+Explanation: The orange in the bottom left corner (row 2, column 0) is never rotten, because rotting only happens 4-directionally.
+
+Example 3:
+Input: grid = [[0,2]]
+Output: 0
+Explanation: Since there are already no fresh oranges at minute 0, the answer is just 0.
+
+Techniques I used: BFS
+
+class Solution {
+    public int orangesRotting(int[][] grid) {
+        int count = -1;
+        int fresh = 0;
+        Queue<int[]> qu = new LinkedList<>();
+        for(int i = 0;i<grid.length;++i){
+            for(int j=0;j<grid[0].length;++j){
+                if(grid[i][j]==1) fresh++;
+                if(grid[i][j]==2) qu.offer(new int[]{i,j});
+            }
+        }
+        if(fresh==0)    return 0;
+        int[][] dir = new int[][]{{1,0},{-1,0},{0,1},{0,-1}};
+        while(!qu.isEmpty()){
+            int n = qu.size();
+            while(n>0){
+                int[] temp = qu.poll();
+                for(int[] d:dir){
+                    int r = temp[0]+d[0];
+                    int c = temp[1]+d[1];
+                    if(r<0 || c<0 || r>=grid.length || c>=grid[0].length || grid[r][c]!=1)  
+                        continue;
+                    grid[r][c] = 2;
+                    qu.offer(new int[]{r,c});
+                    fresh--;
+                }
+                n--;
+            }
+            count++;
+        }
+        return (fresh==0)?count:-1;
+    }
+}

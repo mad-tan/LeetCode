@@ -1,0 +1,68 @@
+Example 1:
+Input: numCourses = 2, prerequisites = [[1,0]]
+Output: [0,1]
+Explanation: There are a total of 2 courses to take. To take course 1 you should have finished course 0. So the correct course order is [0,1].
+
+Example 2:
+Input: numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2]]
+Output: [0,2,1,3]
+Explanation: There are a total of 4 courses to take. To take course 3 you should have finished both courses 1 and 2. Both courses 1 and 2 should be taken after you finished course 0.
+So one correct course order is [0,1,2,3]. Another correct ordering is [0,2,1,3].
+
+Example 3:
+Input: numCourses = 1, prerequisites = []
+Output: [0]
+
+Techniques I used: 
+
+class Solution {
+
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        Map<Integer, List<Integer>> adjList = new HashMap<Integer, List<Integer>>();
+        int[] indegree = new int[numCourses];
+        int[] topologicalOrder = new int[numCourses];
+
+        //creating the adjlist
+        for (int i = 0; i < prerequisites.length; i++) {
+            int post = prerequisites[i][0];
+            int pre = prerequisites[i][1];
+            List<Integer> lst = adjList.getOrDefault(
+                pre,
+                new ArrayList<Integer>()
+            );
+            lst.add(post);
+            adjList.put(pre, lst);
+
+            indegree[post] += 1;
+        }
+
+        Queue<Integer> q = new LinkedList<Integer>();
+        for (int i = 0; i < numCourses; i++) {
+            if (indegree[i] == 0) {
+                q.add(i);
+            }
+        }
+
+        int i = 0;
+        while (!q.isEmpty()) {
+            int node = q.remove();
+            topologicalOrder[i++] = node;
+
+            if (adjList.containsKey(node)) {
+                for (Integer neighbor : adjList.get(node)) {
+                    indegree[neighbor]--;
+
+                    if (indegree[neighbor] == 0) {
+                        q.add(neighbor);
+                    }
+                }
+            }
+        }
+
+        if (i == numCourses) {
+            return topologicalOrder;
+        }
+
+        return new int[0];
+    }
+}
